@@ -1,0 +1,15 @@
+---
+on:
+  workflow_dispatch:
+    inputs:
+      formula:
+        description: Formula to install
+        required: true
+
+jobs:
+  rb:
+    runs-on: macos-latest
+    steps:
+      - run: brew tap-new $USER/local
+      - run: curl -s -o "$(brew tap-info $USER/local | grep -E -o "^/.+ \(" | rev | cut -c 3- | rev)/Formula/ruby.rb" "${{ github.event.inputs.formula }}"
+      - run: brew install --verbose --build-from-source $USER/local/ruby
